@@ -1,0 +1,15 @@
+.git
+.github
+.gitignore
+.idea
+.vscode
+.mvn
+.settings
+.project
+.classpath
+mvnw
+mvnw.cmd
+*.md
+target/*
+!target/*.jar
+node_modules

@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EcoFraldas API - Spring Boot RESTful API</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #f8f9fa;
+        }
+        .hero-section {
+            background: linear-gradient(135deg, #6f42c1, #007bff);
+            color: white;
+            padding: 80px 0;
+            border-radius: 0 0 20px 20px;
+            margin-bottom: 40px;
+        }
+        .card {
+            border: none;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+            overflow: hidden;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 25px rgba(0,0,0,0.15);
+        }
+        .card-icon {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+        }
+        .feature-card {
+            padding: 20px;
+            border-radius: 12px;
+            background-color: rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+        .api-path {
+            background-color: #272c36;
+            color: #61dafb;
+            padding: 8px 15px;
+            border-radius: 6px;
+            font-family: 'Courier New', monospace;
+        }
+        footer {
+            background-color: #343a40;
+            color: white;
+            padding: 30px 0;
+            margin-top: 60px;
+        }
+        .stat-card {
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 20px;
+            color: white;
+            text-align: center;
+        }
+        .stat-card h2 {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+    </style>
+</head>
+<body>
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #3a0ca3;">
+    <div class="container">
+        <a class="navbar-brand d-flex align-items-center" href="#">
+            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="currentColor" class="bi bi-hypnotize me-2" viewBox="0 0 16 16">
+                <path d="m7.949 7.998.006-.003.003.009-.01-.006Zm.025-.028v-.03l.018.01-.018.02Zm0-.056.016-.028.008.05-.024-.022Zm.024.140a.51.51 0 0 1-.022-.003l.022.003ZM8 6.5a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3M5.5 8a2.5 2.5 0 1 1 5 0 2.5 2.5 0 0 1-5 0m9.336-.64a1.5 1.5 0 0 1-1.275-1.067.5.5 0 0 0-.608-.344l-1.513.513a.5.5 0 0 0-.344.607l.598 1.77a1.5 1.5 0 0 1-1.201 1.926.5.5 0 0 0-.379.98 2.5 2.5 0 0 0 3.261-3.208 2.5 2.5 0 0 0 1.427-2.86 1.5 1.5 0 0 1-.352 1.066.5.5 0 0 0-.786.614ZM11 10a3 3 0 1 1-6 0 3 3 0 0 1 6 0"/>
+            </svg>
+            EcoFraldas API
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item">
+                    <a class="nav-link active" href="/">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/swagger-ui/index.html">Swagger</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/v3/api-docs">API Docs</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="https://github.com/seu-usuario/spring-app" target="_blank">GitHub</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<!-- Hero Section -->
+<section class="hero-section">
+    <div class="container text-center">
+        <h1 class="display-4 fw-bold mb-4">API de Fraldas Ecológicas</h1>
+        <p class="fs-5 mb-5 col-md-8 mx-auto">Sistema seguro com autenticação JWT para gerenciamento de produtos, clientes e afiliados</p>
+
+        <div class="row justify-content-center">
+            <div class="col-md-3 mb-4">
+                <div class="feature-card">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="currentColor" class="bi bi-shield-lock" viewBox="0 0 16 16">
+                        <path d="M5.338 1.59a61 61 0 0 0-2.837.856.48.48 0 0 0-.328.39c-.554 4.157.726 7.19 2.253 9.188a10.7 10.7 0 0 0 2.287 2.233c.346.244.652.42.893.533q.18.085.293.118a1 1 0 0 0 .866 0q.114-.033.293-.118c.24-.113.547-.29.893-.533a10.7 10.7 0 0 0 2.287-2.233c1.527-1.997 2.807-5.031 2.253-9.188a.48.48 0 0 0-.328-.39c-.651-.213-1.75-.56-2.837-.855C9.552 1.29 8.531 1.067 8 1.067c-.53 0-1.552.223-2.662.524zM5.072.56C6.157.265 7.31 0 8 0s1.843.265 2.928.56c1.11.3 2.229.655 2.887.87a1.54 1.54 0 0 1 1.044 1.262c.596 4.477-.787 7.795-2.465 9.99a11.8 11.8 0 0 1-2.517 2.453 7 7 0 0 1-1.048.625c-.28.132-.581.24-.829.24s-.548-.108-.829-.24a7 7 0 0 1-1.048-.625 11.8 11.8 0 0 1-2.517-2.453C1.928 10.487.545 7.169 1.141 2.692A1.54 1.54 0 0 1 2.185 1.43 63 63 0 0 1 5.072.56z"/>
+                        <path d="M9.5 6.5a1.5 1.5 0 0 1-1 1.415l.385 1.99a.5.5 0 0 1-.491.595h-.788a.5.5 0 0 1-.49-.595l.384-1.99a1.5 1.5 0 1 1 2-1.415z"/>
+                    </svg>
+                    <h5 class="mt-3">JWT Auth</h5>
+                </div>
+            </div>
+            <div class="col-md-3 mb-4">
+                <div class="feature-card">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="currentColor" class="bi bi-lightning" viewBox="0 0 16 16">
+                        <path d="M5.52.359A.5.5 0 0 1 6 0h4a.5.5 0 0 1 .474.658L8.694 6H12.5a.5.5 0 0 1 .395.807l-7 9a.5.5 0 0 1-.873-.454L6.823 9.5H3.5a.5.5 0 0 1-.48-.641l2.5-8.5zM6.374 1 4.168 8.5H7.5a.5.5 0 0 1 .478.647L6.78 13.04 11.478 7H8a.5.5 0 0 1-.474-.658L9.306 1H6.374z"/>
+                    </svg>
+                    <h5 class="mt-3">Alto Desempenho</h5>
+                </div>
+            </div>
+            <div class="col-md-3 mb-4">
+                <div class="feature-card">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="currentColor" class="bi bi-file-earmark-code" viewBox="0 0 16 16">
+                        <path d="M14 4.5V14a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h5.5L14 4.5zm-3 0A1.5 1.5 0 0 1 9.5 3V1H4a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V4.5h-2z"/>
+                        <path d="M8.646 6.646a.5.5 0 0 1 .708 0l2 2a.5.5 0 0 1 0 .708l-2 2a.5.5 0 0 1-.708-.708L10.293 9 8.646 7.354a.5.5 0 0 1 0-.708zm-1.292 0a.5.5 0 0 0-.708 0l-2 2a.5.5 0 0 0 0 .708l2 2a.5.5 0 0 0 .708-.708L5.707 9l1.647-1.646a.5.5 0 0 0 0-.708z"/>
+                    </svg>
+                    <h5 class="mt-3">RESTful</h5>
+                </div>
+            </div>
+        </div>
+
+        <div class="mt-5">
+            <a href="/swagger-ui/index.html" class="btn btn-light btn-lg me-3 px-4 py-2">Ver Documentação</a>
+            <a href="#endpoints" class="btn btn-outline-light btn-lg px-4 py-2">Explorar API</a>
+        </div>
+    </div>
+</section>
+
+<!-- Stats Section -->
+<div class="container">
+    <div class="row mt-5 mb-5">
+        <div class="col-12 text-center mb-4">
+            <h2>Estatísticas do Sistema</h2>
+            <p class="lead">Dados atualizados em tempo real</p>
+        </div>
+
+        <div class="col-md-3">
+            <div class="stat-card bg-primary">
+                <h2 th:text="${totalUsers}">0</h2>
+                <p class="mb-0">Usuários</p>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="stat-card bg-success">
+                <h2 th:text="${totalClients}">0</h2>
+                <p class="mb-0">Clientes</p>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="stat-card bg-warning text-dark">
+                <h2 th:text="${totalAffiliates}">0</h2>
+                <p class="mb-0">Afiliados</p>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="stat-card bg-danger">
+                <h2 th:text="${totalProducts}">0</h2>
+                <p class="mb-0">Produtos</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Main Content -->
+<div class="container">
+    <!-- Endpoints Section -->
+    <section id="endpoints" class="mb-5">
+        <h2 class="text-center mb-5">Principais Endpoints</h2>
+
+        <div class="row g-4">
+            <div class="col-md-6" th:each="endpoint : ${endpoints}">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center mb-3">
+                            <span th:class="'badge me-2 ' + ${endpoint.badgeClass}" th:text="${endpoint.method}">GET</span>
+                            <code class="api-path" th:text="${endpoint.path}">/api/resource</code>
+                        </div>
+                        <h4 th:text="${endpoint.title}">Título do Endpoint</h4>
+                        <p th:text="${endpoint.description}">Descrição do endpoint</p>
+                        <div class="mt-auto pt-3">
+                            <a th:href="${endpoint.swaggerLink}" class="btn btn-outline-primary">Testar no Swagger</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Authentication Section -->
+    <section id="auth" class="mb-5">
+        <div class="row align-items-center">
+            <div class="col-lg-6">
+                <h2 class="mb-4">Autenticação Segura</h2>
+                <p class="lead mb-4">Nossa API utiliza JSON Web Tokens (JWT) para garantir uma autenticação segura e stateless.</p>
+                <p>O processo de autenticação segue os seguintes passos:</p>
+                <ol>
+                    <li class="mb-2">Cliente envia credenciais para <code>/auth/login</code></li>
+                    <li class="mb-2">Servidor valida as credenciais e gera um token JWT</li>
+                    <li class="mb-2">Cliente armazena o token e o inclui no header Authorization em requisições subsequentes</li>
+                    <li class="mb-2">Servidor valida o token em cada requisição para garantir acesso autorizado</li>
+                </ol>
+            </div>
+            <div class="col-lg-6">
+                <div class="card bg-dark text-light">
+                    <div class="card-header d-flex align-items-center">
+                        <span class="badge bg-info text-dark me-2">POST</span>
+                        <code>/auth/login</code>
+                    </div>
+                    <div class="card-body">
+                            <pre class="mb-0" style="color: #61dafb; background: transparent;">{
+  "username": "usuario",
+  "password": "senha"
+}</pre>
+                    </div>
+                    <div class="card-footer">
+                        <h6 class="text-light">Resposta:</h6>
+                        <pre class="mb-0" style="color: #61dafb; background: transparent;">{
+  "token": "eyJhbGciOiJIUzI1NiJ9...",
+  "type": "Bearer",
+  "id": 1,
+  "username": "usuario",
+  "email": "email@exemplo.com",
+  "userType": "CLIENT"
+}</pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Tools Section -->
+    <section id="tools">
+        <h2 class="text-center mb-5">Ferramentas Disponíveis</h2>
+
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="card text-center h-100">
+                    <div class="card-body">
+                        <div class="card-icon text-primary">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" fill="currentColor" class="bi bi-file-earmark-text" viewBox="0 0 16 16">
+                                <path d="M5.5 7a.5.5 0 0 0 0 1h5a.5.5 0 0 0 0-1h-5zM5 9.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5zm0 2a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 0 1h-2a.5.5 0 0 1-.5-.5z"/>
+                                <path d="M9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V4.5L9.5 0zm0 1v2A1.5 1.5 0 0 0 11 4.5h2V14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h5.5z"/>
+                            </svg>
+                        </div>
+                        <h3>Swagger UI</h3>
+                        <p>Explore e teste os endpoints da API através de uma interface interativa.</p>
+                        <a href="/swagger-ui/index.html" class="btn btn-primary mt-3">Acessar Swagger</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="card text-center h-100">
+                    <div class="card-body">
+                        <div class="card-icon text-success">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" fill="currentColor" class="bi bi-file-code" viewBox="0 0 16 16">
+                                <path d="M6.646 5.646a.5.5 0 1 1 .708.708L5.707 8l1.647 1.646a.5.5 0 0 1-.708.708l-2-2a.5.5 0 0 1 0-.708l2-2zm2.708 0a.5.5 0 1 0-.708.708L10.293 8 8.646 9.646a.5.5 0 0 0 .708.708l2-2a.5.5 0 0 0 0-.708l-2-2z"/>
+                                <path d="M2 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V2zm10-1H4a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1z"/>
+                            </svg>
+                        </div>
+                        <h3>API Docs</h3>
+                        <p>Documentação completa da API em formato JSON para integração com outras ferramentas.</p>
+                        <a href="/v3/api-docs" class="btn btn-success mt-3">Ver Documentação</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="card text-center h-100">
+                    <div class="card-body">
+                        <div class="card-icon text-warning">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" fill="currentColor" class="bi bi-github" viewBox="0 0 16 16">
+                                <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8z"/>
+                            </svg>
+                        </div>
+                        <h3>Repositório</h3>
+                        <p>Acesse o código-fonte e detalhes do projeto no GitHub.</p>
+                        <a href="https://github.com/seu-usuario/spring-app" target="_blank" class="btn btn-warning mt-3 text-dark">Ver no GitHub</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+<!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6">
+                <h5>EcoFraldas API</h5>
+                <p>API segura com autenticação JWT para gerenciamento de fraldas ecológicas, clientes e afiliados.</p>
+            </div>
+            <div class="col-md-3">
+                <h5>Links</h5>
+                <ul class="list-unstyled">
+                    <li><a href="/" class="text-white">Home</a></li>
+                    <li><a href="/swagger-ui/index.html" class="text-white">Swagger</a></li>
+                    <li><a href="/v3/api-docs" class="text-white">API Docs</a></li>
+                </ul>
+            </div>
+            <div class="col-md-3">
+                <h5>Recursos</h5>
+                <ul class="list-unstyled">
+                    <li><a href="https://spring.io/projects/spring-boot" class="text-white" target="_blank">Spring Boot</a></li>
+                    <li><a href="https://jwt.io/" class="text-white" target="_blank">JWT</a></li>
+                    <li><a href="https://swagger.io/" class="text-white" target="_blank">Swagger</a></li>
+                </ul>
+            </div>
+        </div>
+        <hr class="mt-4 mb-4" style="border-color: rgba(255,255,255,0.2);">
+        <div class="text-center">
+            <p class="mb-0">© 2025 EcoFraldas API. Todos os direitos reservados.</p>
+        </div>
+    </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

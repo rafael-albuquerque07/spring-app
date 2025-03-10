@@ -1,0 +1,96 @@
+# Configurações comuns para todos os perfis
+spring:
+  application:
+    name: spring-app
+  # Configuração do Flyway
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+    baseline-on-migrate: true
+    baseline-version: 0
+
+# JWT com chave segura compatível com Base64
+jwt:
+  secret: QW5kcm9tZWRhQ29uc3RlbGxhdGlvblNlY3JldEtleTIwMjVTZWN1cml0eVRva2VuSldUU3VwZXJTZWN1cmVLZXkxMjM0NTY3ODkw
+  expiration: 10800000
+
+# Configuração do Swagger/OpenAPI
+springdoc:
+  api-docs:
+    enabled: true
+    path: /v3/api-docs
+  swagger-ui:
+    enabled: true
+    path: /swagger-ui.html
+    disable-swagger-default-url: true
+    use-root-path: false
+    doc-expansion: none
+    operations-sorter: alpha
+
+# Logging
+logging:
+  level:
+    root: INFO
+    org.springframework.web: DEBUG
+    org.springframework.security: DEBUG
+    org.springframework.security.web.FilterChainProxy: DEBUG
+    com.java_avanade.spring_app: DEBUG
+    com.java_avanade.spring_app.config.jwt: DEBUG
+    org.flywaydb: DEBUG
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
+    file: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
+  file:
+    name: logs/application.log
+  logback:
+    rollingpolicy:
+      max-file-size: 10MB
+      max-history: 30
+      total-size-cap: 100MB
+
+---
+# Perfil de desenvolvimento (DEV)
+spring:
+  config:
+    activate:
+      on-profile: dev
+  datasource:
+    url: jdbc:h2:mem:testdb
+    driverClassName: org.h2.Driver
+    username: sa
+    password: password
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+  jpa:
+    hibernate:
+      ddl-auto: validate # Alterado para 'validate' para usar Flyway em vez de Hibernate
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+    database-platform: org.hibernate.dialect.H2Dialect
+
+---
+# Perfil de produção (PROD)
+spring:
+  config:
+    activate:
+      on-profile: prod
+  datasource:
+    url: jdbc:postgresql://metro.proxy.rlwy.net:41063/railway
+    username: postgres
+    password: hQwXVCTTfYhpwjLoStqmQrlVOwZxuuNy
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: validate # Alterado para 'validate' para usar Flyway em vez de Hibernate
+    show-sql: false
+    properties:
+      hibernate:
+        format_sql: false
+
+server:
+  port: ${PORT:8080}
