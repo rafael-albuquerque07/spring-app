@@ -1,12 +1,34 @@
+# Compilação e build
 HELP.md
-logs/
-src/test/
-db/migration/dev/
+target/
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/
+build/
+!**/src/main/**/build/
+!**/src/test/**/build/
 
-### STS ###
+# Logs
+logs/
+*.log
+log/
+.log.*
+
+# Arquivos de configuração de ambiente
+.env
+*.env
+.env.local
+.env.development
+.env.production
+
+# IDE Configurations
+### IntelliJ IDEA ###
+.idea/
+*.iws
+*.iml
+*.ipr
+
+### Eclipse ###
 .apt_generated
 .classpath
 .factorypath
@@ -15,21 +37,50 @@ db/migration/dev/
 .springBeans
 .sts4-cache
 
-### IntelliJ IDEA ###
-.idea
-*.iws
-*.iml
-*.ipr
-
 ### NetBeans ###
 /nbproject/private/
 /nbbuild/
 /dist/
 /nbdist/
 /.nb-gradle/
-build/
-!**/src/main/**/build/
-!**/src/test/**/build/
 
 ### VS Code ###
 .vscode/
+*.code-workspace
+
+# Sistemas Operacionais
+.DS_Store
+Thumbs.db
+
+# Backup e temporários
+*.bak
+*.swp
+*.swo
+*~
+
+# Dependências
+node_modules/
+
+# Banco de dados local
+db/
+*.db
+
+# Segurança
+*.key
+*.pem
+
+# Testes
+src/test/
+coverage/
+*.coverage
+
+# Configurações específicas de desenvolvimento
+application-local.properties
+application-dev.properties
+
+# Arquivos grandes
+*.gz
+*.zip
+
+# Específicos do Spring
+rebel.xml
