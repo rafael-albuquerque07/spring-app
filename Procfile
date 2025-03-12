@@ -1,1 +1,1 @@
-web: java --enable-preview -jar target/spring-app-0.0.1-SNAPSHOT.jar
+web: java --enable-preview -jar target/spring_app-0.0.1-SNAPSHOT.jar
