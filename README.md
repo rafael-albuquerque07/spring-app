@@ -54,7 +54,7 @@ classDiagram
         +Product product
         +Integer quantity
     }
-
+    
     class Order {
         +Long orderId
         +Client client
@@ -64,7 +64,7 @@ classDiagram
         +String status
         +BigDecimal totalAmount
     }
-
+    
     class Cart {
         +Long id
         +Order order
@@ -72,7 +72,7 @@ classDiagram
         +Integer quantity
         +String paymentType
     }
-
+    
     class Checkout {
         +Long id
         +Order order

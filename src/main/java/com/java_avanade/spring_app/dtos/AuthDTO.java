@@ -54,7 +54,7 @@ public class AuthDTO {
     }
 
     /**
-     * DTO para resposta com token JWT após autenticação ou registro bem-sucedido
+     * DTO para resposta com token JWT após autenticação bem-sucedida
      */
     @Data
     @NoArgsConstructor
@@ -73,5 +73,19 @@ public class AuthDTO {
             this.email = email;
             this.userType = userType;
         }
+    }
+
+    /**
+     * DTO para resposta após registro bem-sucedido (sem token)
+     */
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class RegisterResponse {
+        private Long id;
+        private String username;
+        private String email;
+        private String userType;
+        private String message;
     }
 }

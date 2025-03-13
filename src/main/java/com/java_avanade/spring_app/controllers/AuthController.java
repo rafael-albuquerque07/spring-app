@@ -7,6 +7,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,9 +29,10 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    @Operation(summary = "Registrar novo usuário", description = "Registra um novo usuário como cliente ou afiliado")
-    public ResponseEntity<AuthDTO.JwtResponse> registerUser(@Valid @RequestBody AuthDTO.RegisterRequest registerRequest) {
-        AuthDTO.JwtResponse jwtResponse = authService.registerUser(registerRequest);
-        return ResponseEntity.ok(jwtResponse);
+    @Operation(summary = "Registrar novo usuário", description = "Registra um novo usuário como cliente ou afiliado (requer autenticação como ADMIN)")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<AuthDTO.RegisterResponse> registerUser(@Valid @RequestBody AuthDTO.RegisterRequest registerRequest) {
+        AuthDTO.RegisterResponse registerResponse = authService.registerUser(registerRequest);
+        return ResponseEntity.ok(registerResponse);
     }
 }

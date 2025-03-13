@@ -42,6 +42,13 @@ public class DataLoader {
             @Override
             @Transactional // Executa tudo em uma única transação
             public void run(String... args) throws Exception {
+                // Verificar se existe um admin com ID 1 e atualizar a senha se necessário
+                userRepository.findById(1L).ifPresent(admin -> {
+                    admin.setPassword(passwordEncoder.encode("admin123"));
+                    userRepository.save(admin);
+                    logger.info("Senha do admin atualizada");
+                });
+
                 // Carrega dados apenas se não houver usuários no banco
                 if (userRepository.count() == 0) {
                     logger.info("Carregando dados iniciais...");
@@ -59,6 +66,8 @@ public class DataLoader {
                     createProducts(productRepository, stockRepository, affiliate);
 
                     logger.info("Dados iniciais carregados com sucesso!");
+                } else {
+                    logger.info("Banco de dados já possui usuários, pulando carregamento de dados iniciais");
                 }
             }
 

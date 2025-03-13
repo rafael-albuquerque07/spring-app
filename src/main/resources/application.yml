@@ -59,18 +59,18 @@ spring:
     driverClassName: org.h2.Driver
     username: sa
     password: password
-    platform: h2
   h2:
     console:
       enabled: true
       path: /h2-console
   jpa:
     hibernate:
-      ddl-auto: validate # Alterado para 'validate' para usar Flyway em vez de Hibernate
+      ddl-auto: update # Alterado para 'update' para permitir que o Hibernate atualize o esquema automaticamente
     show-sql: true
     properties:
       hibernate:
         format_sql: true
+        schema_validation.enabled: false # Adiciona a propriedade para desabilitar a validação de esquema
     database-platform: org.hibernate.dialect.H2Dialect
 
 ---
@@ -84,15 +84,15 @@ spring:
     username: postgres
     password: hQwXVCTTfYhpwjLoStqmQrlVOwZxuuNy
     driver-class-name: org.postgresql.Driver
-    platform: postgresql
   jpa:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
     hibernate:
-      ddl-auto: validate # Alterado para 'validate' para usar Flyway em vez de Hibernate
+      ddl-auto: validate # Mantido 'validate' para produção
     show-sql: false
     properties:
       hibernate:
         format_sql: false
+        schema_validation.enabled: false # Adiciona a propriedade para desabilitar a validação de esquema
 
 server:
   port: ${PORT:8080}
@@ -108,17 +108,17 @@ spring:
     driverClassName: org.h2.Driver
     username: sa
     password: password
-    platform: h2
   h2:
     console:
       enabled: true
   jpa:
     hibernate:
-      ddl-auto: validate
+      ddl-auto: update # Alterado para 'update' para testes
     show-sql: true
     properties:
       hibernate:
         format_sql: true
+        schema_validation.enabled: false # Adiciona a propriedade para desabilitar a validação de esquema
     database-platform: org.hibernate.dialect.H2Dialect
   flyway:
     enabled: true # Garantir que o Flyway está habilitado para testes

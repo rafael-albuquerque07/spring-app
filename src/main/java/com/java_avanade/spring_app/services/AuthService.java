@@ -99,7 +99,7 @@ public class AuthService {
     }
 
     @Transactional
-    public AuthDTO.JwtResponse registerUser(AuthDTO.RegisterRequest registerRequest) {
+    public AuthDTO.RegisterResponse registerUser(AuthDTO.RegisterRequest registerRequest) {
         logger.info("Iniciando registro de novo usuário: {}", registerRequest.getUsername());
 
         // Verificar se o username já existe em qualquer entidade
@@ -144,23 +144,14 @@ public class AuthService {
                 Affiliate savedAffiliate = affiliateRepository.save(affiliate);
                 logger.debug("Afiliado criado: {} com ID {}", savedAffiliate.getUsername(), savedAffiliate.getId());
 
-                // Autenticar o afiliado recém-registrado
-                Authentication authentication = authenticationManager.authenticate(
-                        new UsernamePasswordAuthenticationToken(registerRequest.getUsername(), registerRequest.getPassword())
-                );
+                logger.info("Afiliado registrado com sucesso: {}", affiliate.getUsername());
 
-                SecurityContextHolder.getContext().setAuthentication(authentication);
-                UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-                String jwt = jwtTokenProvider.generateToken(userDetails);
-
-                logger.info("Afiliado registrado e autenticado com sucesso: {}", affiliate.getUsername());
-
-                return new AuthDTO.JwtResponse(
-                        jwt,
-                        affiliate.getId(),
-                        affiliate.getUsername(),
-                        affiliate.getEmail(),
-                        "AFFILIATE"
+                return new AuthDTO.RegisterResponse(
+                        savedAffiliate.getId(),
+                        savedAffiliate.getUsername(),
+                        savedAffiliate.getEmail(),
+                        "AFFILIATE",
+                        "Registro de afiliado realizado com sucesso"
                 );
             } else {
                 // Por padrão, criar cliente
@@ -178,23 +169,14 @@ public class AuthService {
                 Client savedClient = clientRepository.save(client);
                 logger.debug("Cliente criado: {} com ID {}", savedClient.getUsername(), savedClient.getId());
 
-                // Autenticar o cliente recém-registrado
-                Authentication authentication = authenticationManager.authenticate(
-                        new UsernamePasswordAuthenticationToken(registerRequest.getUsername(), registerRequest.getPassword())
-                );
+                logger.info("Cliente registrado com sucesso: {}", client.getUsername());
 
-                SecurityContextHolder.getContext().setAuthentication(authentication);
-                UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-                String jwt = jwtTokenProvider.generateToken(userDetails);
-
-                logger.info("Cliente registrado e autenticado com sucesso: {}", client.getUsername());
-
-                return new AuthDTO.JwtResponse(
-                        jwt,
-                        client.getId(),
-                        client.getUsername(),
-                        client.getEmail(),
-                        "CLIENT"
+                return new AuthDTO.RegisterResponse(
+                        savedClient.getId(),
+                        savedClient.getUsername(),
+                        savedClient.getEmail(),
+                        "CLIENT",
+                        "Registro de cliente realizado com sucesso"
                 );
             }
         } catch (Exception e) {
